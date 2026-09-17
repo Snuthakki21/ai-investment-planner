@@ -1,0 +1,82 @@
+{
+  "budget_k": 150,
+  "capacity_months": 20,
+  "benefit_factor": 1.0,
+  "seed": 21,
+  "discounted_cash_flow": {
+    "horizon_years": 3,
+    "discount_rate": 0.1,
+    "annual_benefit_growth": 0,
+    "annual_operating_cost_fraction": 0.08
+  },
+  "benefit_overlaps": [],
+  "stage_evidence": [],
+  "correlated_sensitivity": {
+    "paths": 100,
+    "correlation": 0.6,
+    "spread": 0.3
+  },
+  "initiatives": [
+    {
+      "id": "data-foundation",
+      "name": "Trusted data foundation",
+      "cost_k": 90,
+      "months": 5,
+      "benefit_k": 125,
+      "confidence": 0.85,
+      "risk": 0.1,
+      "depends_on": [],
+      "owner": "Data Platform"
+    },
+    {
+      "id": "test-data",
+      "name": "Synthetic testing service",
+      "cost_k": 110,
+      "months": 6,
+      "benefit_k": 260,
+      "confidence": 0.8,
+      "risk": 0.15,
+      "depends_on": [
+        "data-foundation"
+      ],
+      "owner": "Engineering Enablement"
+    },
+    {
+      "id": "incident",
+      "name": "Incident investigation assistant",
+      "cost_k": 75,
+      "months": 4,
+      "benefit_k": 155,
+      "confidence": 0.75,
+      "risk": 0.2,
+      "depends_on": [],
+      "owner": "Operations"
+    },
+    {
+      "id": "policy",
+      "name": "Grounded policy search",
+      "cost_k": 65,
+      "months": 4,
+      "benefit_k": 145,
+      "confidence": 0.85,
+      "risk": 0.15,
+      "depends_on": [
+        "data-foundation"
+      ],
+      "owner": "Knowledge Services"
+    },
+    {
+      "id": "autonomous",
+      "name": "Autonomous remediation",
+      "cost_k": 170,
+      "months": 10,
+      "benefit_k": 470,
+      "confidence": 0.4,
+      "risk": 0.65,
+      "depends_on": [
+        "incident"
+      ],
+      "owner": "Operations"
+    }
+  ]
+}

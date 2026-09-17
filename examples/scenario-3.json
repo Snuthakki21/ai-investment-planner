@@ -1,8 +1,42 @@
 {
   "budget_k": 340,
   "capacity_months": 20,
-  "benefit_factor": 0.5,
+  "benefit_factor": 1.0,
   "seed": 21,
+  "discounted_cash_flow": {
+    "horizon_years": 3,
+    "discount_rate": 0.1,
+    "annual_benefit_growth": 0,
+    "annual_operating_cost_fraction": 0.08
+  },
+  "benefit_overlaps": [
+    {
+      "name": "shared operational effort",
+      "members": [
+        "incident",
+        "autonomous"
+      ],
+      "overlap_fraction": 0.65
+    }
+  ],
+  "stage_evidence": [
+    {
+      "initiative": "data-foundation",
+      "stage": "discovery",
+      "assumption_revision": "86d3309b1c782c9479e6400e3286d2159cd849a98d5a070ed287b5e81815e636",
+      "metric": "Synthetic pilot acceptance rate",
+      "observed": 95,
+      "target": 90,
+      "operator": ">=",
+      "source_reference": "Original synthetic pilot fixture",
+      "reviewer": "Example committee reviewer"
+    }
+  ],
+  "correlated_sensitivity": {
+    "paths": 100,
+    "correlation": 0.6,
+    "spread": 0.3
+  },
   "initiatives": [
     {
       "id": "data-foundation",

@@ -153,10 +153,10 @@
       {
         "benefit_factor": 0.5,
         "selected": [],
-        "cost_k": 0,
-        "months": 0,
-        "adjusted_benefit_k": 0,
-        "net_value_k": 0
+        "cost_k": 0.0,
+        "months": 0.0,
+        "adjusted_benefit_k": 0.0,
+        "net_value_k": 0.0
       },
       {
         "benefit_factor": 0.75,
@@ -229,16 +229,374 @@
       ]
     ],
     "model_brief": null,
-    "mode": "local exact optimization"
+    "mode": "local exact optimization",
+    "discounted_analysis": {
+      "selection": {
+        "selected": [
+          "data-foundation",
+          "test-data",
+          "incident",
+          "policy"
+        ],
+        "cost_k": 340.0,
+        "effort_person_months": 19.0,
+        "npv_k": 761.644346,
+        "adjusted_annual_benefit_k": 470.1875
+      },
+      "legacy_selection_npv_k": 761.644346,
+      "assumptions": {
+        "horizon_years": 3,
+        "discount_rate": "0.1",
+        "annual_benefit_growth": "0",
+        "annual_operating_cost_fraction": "0.08"
+      },
+      "cash_flows": [
+        {
+          "year": 1,
+          "gross_benefit_k": 470.1875,
+          "operating_cost_k": 27.2,
+          "net_cash_flow_k": 442.9875,
+          "discounted_cash_flow_k": 402.715909
+        },
+        {
+          "year": 2,
+          "gross_benefit_k": 470.1875,
+          "operating_cost_k": 27.2,
+          "net_cash_flow_k": 442.9875,
+          "discounted_cash_flow_k": 366.105372
+        },
+        {
+          "year": 3,
+          "gross_benefit_k": 470.1875,
+          "operating_cost_k": 27.2,
+          "net_cash_flow_k": 442.9875,
+          "discounted_cash_flow_k": 332.823065
+        }
+      ],
+      "time_zero_cost_k": 340.0,
+      "overlap_deductions": [],
+      "feasible_portfolios": 12,
+      "objective": "Separate discounted objective: year-end adjusted benefits minus annual operating cost, discounted to time zero, less initial implementation cost. The legacy one-year adjusted net-value result is preserved."
+    },
+    "funding_evidence": {
+      "assumption_revision": "9343e544619626c6fe2326f395cf191b9e3b6a96655ca47f62bee5ede0be1a94",
+      "gates": [
+        {
+          "initiative": "data-foundation",
+          "stage": "discovery",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.10",
+          "tranche_k": 9.0,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "data-foundation",
+          "stage": "pilot",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.30",
+          "tranche_k": 27.0,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "data-foundation",
+          "stage": "scale",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.60",
+          "tranche_k": 54.0,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "incident",
+          "stage": "discovery",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.10",
+          "tranche_k": 7.5,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "incident",
+          "stage": "pilot",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.30",
+          "tranche_k": 22.5,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "incident",
+          "stage": "scale",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.60",
+          "tranche_k": 45.0,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "test-data",
+          "stage": "discovery",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.10",
+          "tranche_k": 11.0,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "test-data",
+          "stage": "pilot",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.30",
+          "tranche_k": 33.0,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "test-data",
+          "stage": "scale",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.60",
+          "tranche_k": 66.0,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "policy",
+          "stage": "discovery",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.10",
+          "tranche_k": 6.5,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "policy",
+          "stage": "pilot",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.30",
+          "tranche_k": 19.5,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        },
+        {
+          "initiative": "policy",
+          "stage": "scale",
+          "status": "evidence_missing",
+          "tranche_fraction": "0.60",
+          "tranche_k": 39.0,
+          "metric": null,
+          "observed": null,
+          "target": null,
+          "operator": null,
+          "reviewer": null,
+          "source_reference": null
+        }
+      ],
+      "funding": [
+        {
+          "initiative": "data-foundation",
+          "eligible_fraction": "0",
+          "eligible_funding_k": 0.0,
+          "total_cost_k": 90
+        },
+        {
+          "initiative": "incident",
+          "eligible_fraction": "0",
+          "eligible_funding_k": 0.0,
+          "total_cost_k": 75
+        },
+        {
+          "initiative": "test-data",
+          "eligible_fraction": "0",
+          "eligible_funding_k": 0.0,
+          "total_cost_k": 110
+        },
+        {
+          "initiative": "policy",
+          "eligible_fraction": "0",
+          "eligible_funding_k": 0.0,
+          "total_cost_k": 65
+        }
+      ],
+      "total_eligible_funding_k": 0.0,
+      "scope": "Scenario evidence workflow only. Reviewer/source labels are supplied data, not authenticated approvals. No funding transaction is executed."
+    },
+    "correlated_sensitivity": {
+      "paths": 100,
+      "seed": 21,
+      "latent_correlation": 0.6,
+      "spread": 0.3,
+      "candidate_policies": [
+        {
+          "selected": [
+            "data-foundation",
+            "test-data",
+            "incident",
+            "policy"
+          ],
+          "assumed_npv_k": 761.644346,
+          "mean_scenario_npv_k": 812.755666,
+          "p10_npv_k": 472.484408,
+          "p90_npv_k": 1149.251547,
+          "mean_regret_k": 0.134169,
+          "best_in_path_count": 98
+        },
+        {
+          "selected": [],
+          "assumed_npv_k": 0.0,
+          "mean_scenario_npv_k": 0.0,
+          "p10_npv_k": 0.0,
+          "p90_npv_k": 0.0,
+          "mean_regret_k": 812.889835,
+          "best_in_path_count": 0
+        },
+        {
+          "selected": [
+            "data-foundation",
+            "test-data",
+            "policy"
+          ],
+          "assumed_npv_k": 620.288223,
+          "mean_scenario_npv_k": 662.358639,
+          "p10_npv_k": 354.588244,
+          "p90_npv_k": 967.072675,
+          "mean_regret_k": 150.531196,
+          "best_in_path_count": 1
+        },
+        {
+          "selected": [
+            "data-foundation",
+            "test-data",
+            "incident"
+          ],
+          "assumed_npv_k": 579.047145,
+          "mean_scenario_npv_k": 627.895477,
+          "p10_npv_k": 331.095614,
+          "p90_npv_k": 896.444203,
+          "mean_regret_k": 184.994358,
+          "best_in_path_count": 1
+        },
+        {
+          "selected": [
+            "data-foundation",
+            "incident",
+            "policy"
+          ],
+          "assumed_npv_k": 453.853212,
+          "mean_scenario_npv_k": 473.85101,
+          "p10_npv_k": 244.055597,
+          "p90_npv_k": 696.453476,
+          "mean_regret_k": 339.038825,
+          "best_in_path_count": 0
+        },
+        {
+          "selected": [
+            "data-foundation",
+            "test-data"
+          ],
+          "assumed_npv_k": 437.691022,
+          "mean_scenario_npv_k": 477.49845,
+          "p10_npv_k": 232.778313,
+          "p90_npv_k": 699.424583,
+          "mean_regret_k": 335.391385,
+          "best_in_path_count": 0
+        },
+        {
+          "selected": [
+            "data-foundation",
+            "policy"
+          ],
+          "assumed_npv_k": 312.497089,
+          "mean_scenario_npv_k": 323.453983,
+          "p10_npv_k": 154.511571,
+          "p90_npv_k": 480.726531,
+          "mean_regret_k": 489.435852,
+          "best_in_path_count": 0
+        },
+        {
+          "selected": [
+            "data-foundation",
+            "incident"
+          ],
+          "assumed_npv_k": 271.256011,
+          "mean_scenario_npv_k": 288.99082,
+          "p10_npv_k": 135.094374,
+          "p90_npv_k": 443.269403,
+          "mean_regret_k": 523.899015,
+          "best_in_path_count": 0
+        },
+        {
+          "selected": [
+            "data-foundation",
+            "incident",
+            "autonomous"
+          ],
+          "assumed_npv_k": 231.069684,
+          "mean_scenario_npv_k": 261.421325,
+          "p10_npv_k": 65.184901,
+          "p90_npv_k": 433.768322,
+          "mean_regret_k": 551.46851,
+          "best_in_path_count": 0
+        }
+      ],
+      "candidate_selection": "Legacy choice, discounted choice, no funding, and top eight feasible sets under base NPV, deduplicated.",
+      "interpretation": "Seeded synthetic common-factor benefit sensitivity. Expected regret is relative only to the displayed candidate policies under assumed draws, not a calibrated forecast or global hindsight optimum. Ties count as best for every tied policy."
+    }
   },
   "provenance": {
     "project_id": "ai_investment_planner",
-    "executed_at": "2026-09-17T05:01:51.565117+00:00",
+    "executed_at": "2026-09-17T06:11:54.878768+00:00",
     "mode": "local",
     "model_calls": [],
-    "elapsed_ms": 0.979,
-    "input_sha256": "6b50d17858836aa5c474ec606edc0393e58431a72b1c044f3ca46a87a9f40c92",
-    "source_sha256": "cc18c69da8cb967e48abb7a4211643330ba1fcc1a18ec5d56e4adebc332c60da",
+    "elapsed_ms": 2.745,
+    "input_sha256": "ef98baf9f3c36c4c975dda28ab11b1efa4d65f0b79d5c82c99b9dc71057300e1",
+    "source_sha256": "8516c702355310aee51c1b53af403c7410366c769f3d44860fb2250e7b587760",
     "data_classification": "original synthetic fixture",
     "scope": "Reference application run; not a production benchmark or employer result"
   }

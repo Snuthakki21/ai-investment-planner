@@ -1,171 +1,128 @@
 # AI Investment Planner
 
-[![Tests and coverage](https://github.com/Snuthakki21/ai-investment-planner/actions/workflows/ci.yml/badge.svg)](https://github.com/Snuthakki21/ai-investment-planner/actions/workflows/ci.yml) [![Publish application](https://github.com/Snuthakki21/ai-investment-planner/actions/workflows/pages.yml/badge.svg)](https://github.com/Snuthakki21/ai-investment-planner/actions/workflows/pages.yml)
-
-**[Open the application](https://Snuthakki21.github.io/ai-investment-planner/)** · [Independent Staff Engineer review](projects/ai_investment_planner/independent-staff-review.md) · [Shared runtime review](docs/INDEPENDENT_RUNTIME_REVIEW.md) · [Verification evidence](docs/VALIDATION.md) · [Tests](tests) · [Run locally](docs/RUNNING.md)
-
 ![Application workspace](docs/screenshots/desktop.png)
 
-Examples: [Default input](examples/base.json) · [Tighter budget](examples/scenario-2.json) · [Benefits fall by half](examples/scenario-3.json) · [Executed default report](examples/report.json)
+A funding workspace for exact initiative selection, discounted alternatives and evidence-bound delivery stages.
 
-A funding committee workbook that selects a feasible set of initiatives, shows why each was chosen, and exposes when a change in assumptions would change the decision.
+[Open application](https://Snuthakki21.github.io/ai-investment-planner/) · [Architecture](docs/ARCHITECTURE.md) · [Domain contracts](docs/DOMAIN_CONTRACTS.md) · [Runbook](docs/PRODUCT_RUNBOOK.md) · [Tests](tests)
 
-**The business problem:** an attractive AI proposal can consume capacity needed by a more valuable dependency, and a high headline benefit can disappear after uncertainty is considered. A ranked list alone cannot solve this problem because initiatives depend on one another.
+[![Tests](https://github.com/Snuthakki21/ai-investment-planner/actions/workflows/ci.yml/badge.svg)](https://github.com/Snuthakki21/ai-investment-planner/actions/workflows/ci.yml)
 
-**What runs here:** an exact, bounded portfolio optimizer; a dependency-aware delivery sequence; benefit sensitivity; a funding frontier; an illustrative spread of outcomes; and an optional model-generated committee brief. All input assumptions are original and fictional. The application does not present them as realized savings, an employer result, or a financial valuation.
+An attractive AI initiative can consume the same capacity as a better alternative, depend on an unfunded foundation, double-count another team's savings or fail to justify the next funding tranche. This application makes those constraints and assumptions explicit. Its exact solver, separate discounted objective, overlap policy and stage-evidence workflow give a funding committee a reproducible decision record.
 
-[Open the funding workbook](https://Snuthakki21.github.io/ai-investment-planner/) · [Source](projects/ai_investment_planner/project.py) · [Independent automated Staff Engineer review](projects/ai_investment_planner/independent-staff-review.md)
+## Start the application
 
-## A two-minute walkthrough
-
-1. Open the workbook and run **Base investment case**. Five proposals compete for a $340k budget and 20 person-months of capacity.
-2. Inspect the selected initiatives and dependency waves. The data foundation enables downstream projects even though its individual return is modest.
-3. Load **Tighter budget**. The optimizer recomputes the feasible combinations rather than truncating a ranked list.
-4. Load **Benefits fall by half**. An empty recommendation is a valid outcome when no feasible set has positive adjusted net value.
-5. Change the budget, capacity, or benefit multiplier and rerun. Download the report to retain the inputs' fingerprint and computed evidence.
-
-The public page runs the same Python code in a browser worker. It requires no account or model key. Advanced users can load a JSON input file or edit the full initiative list.
-
-## What this demonstrates
-
-| Engineering responsibility | Inspectable evidence |
-| --- | --- |
-| Principal: choose the right decision mechanism | Exact enumeration with explicit constraints, deterministic tie handling, and a hard 16-initiative bound. A model does not decide the funding allocation. |
-| Principal: preserve numerical correctness | Decimal arithmetic for feasibility and objective comparisons; adversarial regressions for fractional budgets and nearly equal returns. |
-| Principal: manage trust boundaries | Optional model text receives computed selection evidence and must satisfy a closed output schema. It has no execution authority. |
-| Director: connect spend to delivery | Budget, person-month capacity, dependencies, owners, and validation milestones appear in one reviewable plan. |
-| Director: test assumptions before committing | Funding-frontier and benefit-sensitivity results show where the recommendation changes. |
-
-These are capabilities demonstrated by this repository. They are not claims that this particular solution was deployed at a previous employer.
-
-## Run locally
-
-Python 3.11 or newer is sufficient for the application. There are no third-party Python runtime dependencies.
+Python 3.11 or later is supported. From a source checkout:
 
 ```sh
-python -m portfolio run ai_investment_planner
-python -m portfolio serve --port 8765
+python3 -m portfolio serve
 ```
 
-Open `http://127.0.0.1:8765`. To use your own inputs and retain the result:
+Open `http://127.0.0.1:8765`. Load the base case, adjust budget/capacity and compare the one-year net-value selection with the discounted alternative. Use the staged-evidence example to inspect accepted and missing funding gates.
 
 ```sh
-python -m portfolio run ai_investment_planner --input examples/base.json --output run-result.json
+python3 -m portfolio run ai_investment_planner --input examples/base.json --output reports/funding.json
+python3 -m unittest discover -s tests -v
 ```
 
-The standalone repository includes `examples/base.json` and two alternative scenarios. The application is stateless: the input file and downloaded report are the durable artifacts. See [running and deployment](docs/RUNNING.md) for the CLI, browser build, and MCP interface.
+The public browser app runs the same Python product code in a worker. Browser workspace data stays in the current browser; the native workspace stores scenarios, revisions, execution history and reviews in local SQLite. Neither mode implies a shared authenticated cloud deployment. See [Running](docs/RUNNING.md) and [Model integration](docs/MODEL_INTEGRATION.md).
 
-## Decision model
+## Funding workflows
 
-For each initiative:
+### 1. Select a feasible investment set
 
-```text
-adjusted benefit = annual benefit assumption × benefit multiplier × confidence × (1 − risk)
-net value        = total adjusted benefit − total implementation cost
-```
+Enter initiative cost, delivery effort, annual benefit, confidence, risk, dependencies and accountable owner. The exact solver evaluates every feasible set of up to sixteen initiatives. Budget, person-month capacity and dependencies are hard constraints. The legacy objective is adjusted one-year benefit minus one-time implementation cost; no funding is selected when every feasible net value is nonpositive.
 
-A selected set must satisfy all of the following:
+The solver compares Decimal values before rounding. This matters when two plans differ by a fraction or sit exactly on a budget boundary. Equal positive value favors lower cost. Delivery waves explain dependency order; they do not imply a calendar schedule.
 
-- Total implementation cost does not exceed the budget.
-- Total person-month effort does not exceed capacity.
-- Every selected initiative's dependencies are also selected.
-- The dependency graph has no cycles or unknown identifiers.
+### 2. Compare a discounted objective
 
-The solver enumerates all nonempty subsets, retains the feasible set with greatest positive net value, and prefers lower implementation cost on an exact tie. The empty set is the starting incumbent. If both objective and cost tie, input order determines the stable choice; the application makes no claim of fairness between equivalent proposals.
+Define the horizon, discount rate, annual benefit growth and annual operating-cost fraction. A separate optimizer discounts year-end net cash flows and subtracts time-zero implementation cost. Inspect its selected set, annual cash-flow rows and the legacy selection's NPV under the same assumptions.
 
-Inputs are converted with `Decimal(str(value))` before optimization. Comparisons use full computed precision; presentation rounds benefits and net value to six decimal places. Capacity is an effort constraint, not a staffing calendar or delivery-date forecast.
+The report preserves both objectives. A multi-year NPV decision must not be presented as if it were the original one-year adjusted net-value decision. Values are fictional planning assumptions, not observed ROI.
 
-The benefit-sensitivity table evaluates multipliers 0.5, 0.75, 1.0 and 1.25. The funding frontier evaluates 50%, 75%, 100% and 125% of the supplied budget. Each row resolves the portfolio again. Five hundred seeded triangular draws illustrate uncertainty for the selected set; they assume independent benefits and are **not** calibrated confidence intervals.
+### 3. Control overlapping benefits
 
-## Architecture and boundaries
+Define named groups of initiatives sharing a benefit. The policy deducts `overlap_fraction × (sum of selected group benefits − largest selected group benefit)`. At 100% overlap, only the largest shared benefit survives; at zero overlap, all selected benefits remain additive. A single selected member is unaffected.
 
-```mermaid
-flowchart LR
-    A[Initiative assumptions] --> B[Validate bounds and dependency DAG]
-    B --> C[Enumerate feasible subsets]
-    C --> D[Exact objective comparison]
-    D --> E[Funding frontier and benefit sensitivity]
-    D --> F[Owner-assigned dependency waves]
-    E --> G[Inspectable report]
-    F --> G
-    G --> H[Optional structured model brief]
-    H --> I[Human funding committee]
-    G --> I
-```
+An initiative may belong to only one overlap group, avoiding ambiguous repeated deductions. Overlap affects the discounted alternative and its sensitivity analysis; the original additive objective remains visible for comparison.
 
-| Decision | Reason | Revisit when |
-| --- | --- | --- |
-| Exact enumeration instead of an agent or solver service | At 16 initiatives the search is bounded and every choice can be independently checked. There is no model-induced allocation drift. | Larger portfolios or multidimensional constraints justify a tested MILP formulation. |
-| Deterministic calculation before optional generation | Narrative can clarify a decision without becoming its source of truth. | Never delegate the arithmetic or constraint acceptance to prose generation. |
-| Repository-local fixtures and browser execution | A reviewer can reproduce the example without cloud access or credentials. | A real organization needs authenticated data ingestion, signed assumption approvals, and controlled persistence. |
-| No automatic funding action | Selection is advice for a review process; the program has no purchasing or deployment integration. | Any future action adapter would need separate authorization and an audit trail. |
+### 4. Release a modeled tranche against current evidence
+
+Discovery, pilot and scale represent 10%, 30% and 60% of an initiative's implementation cost. Each gate requires a metric, observed result, target, comparison operator, source reference and reviewer label. Evidence binds to a SHA-256 revision of the funding assumptions. A changed budget, initiative, valuation assumption or overlap policy invalidates old evidence.
+
+Stages cannot be skipped. Dependencies must reach the same stage before a dependent initiative does. Missing, stale, failing and out-of-sequence evidence produces explicit gate statuses. Only accepted evidence contributes to modeled eligible funding. Reviewer labels are supplied scenario data, not authenticated approvals; the application moves no money.
+
+### 5. Examine correlated benefits and regret
+
+Use a seeded Gaussian common factor to perturb initiative benefits, with bounded nonnegative multipliers. Compare the original selection, discounted selection, no funding and the top eight base-NPV feasible sets. The report shows mean scenario NPV, P10/P90 and mean regret relative to that displayed candidate set.
+
+This is synthetic scenario sensitivity. It is neither a calibrated probability forecast nor an exhaustive hindsight optimum for every draw. The older independent triangular spread remains separately labeled, so correlation assumptions cannot be confused.
+
+### 6. Draft a bounded decision brief
+
+A configured native model can explain calculated selection, sensitivity and owners. The model receives person-month effort rather than calendar duration, cannot modify the solver and is instructed not to invent financial facts. Schema validation controls output shape; prose still needs review.
+
+## Application structure
+
+| Component | Responsibility |
+|---|---|
+| [`app/domain/validation.py`](app/domain/validation.py) | Input validation, identifier/dependency checks and cycle detection. |
+| [`app/domain/optimization.py`](app/domain/optimization.py) | Typed Initiative and FeasiblePortfolio entities; FeasibleSet enumeration and ExactOptimizer. |
+| [`app/domain/valuation.py`](app/domain/valuation.py) | DiscountAssumptions cash flows, BenefitOverlap entities and OverlapPolicy. |
+| [`app/domain/funding.py`](app/domain/funding.py) | FundingEvidence, assumption revision and sequential/dependency stage gates. |
+| [`app/domain/analysis.py`](app/domain/analysis.py) | Discounted selection, correlated sensitivity and finite-candidate expected regret. |
+| [`app/domain/sensitivity.py`](app/domain/sensitivity.py) | Legacy independent-benefit spread and dependency delivery waves. |
+| [`app/ai/brief.py`](app/ai/brief.py) | Optional explanation over calculated facts. |
+| [`app/application/product.py`](app/application/product.py) | ProductApplication orchestrates validation, objectives, evidence and reports. |
+| `app/platform/` | Scenario persistence, optimistic versions, run history, comparisons and review audit. |
+| `projects/ai_investment_planner/project.py` | Public compatibility adapter and original synthetic scenarios. |
+| `web/templates/ai_investment_planner.js` | Funding memo, discounted cash flows, stage gates and sensitivity views. |
 
 ## Input contract
 
-| Field | Meaning and validation |
-| --- | --- |
-| `budget_k` | Finite number from 0 to 100,000; fictional budget in thousands of dollars. |
-| `capacity_months` | Finite number from 0 to 100,000; total person-month effort available. |
-| `benefit_factor` | Finite number from 0 to 3; common multiplier applied to benefits. |
-| `seed` | Optional integer, default 21; controls the illustrative outcome spread. Booleans are rejected. |
-| `initiatives` | Between 1 and 16 objects. |
-| `id`, `name`, `owner` | Nonempty strings of at most 100 characters; identifiers must be unique. |
-| `cost_k`, `months`, `benefit_k` | Finite numbers from 0 to 100,000 per initiative. |
-| `confidence`, `risk` | Finite fractions in [0, 1]. These are user assumptions, not inferred probabilities. |
-| `depends_on` | Array of existing initiative identifiers; cycles and self-dependencies fail validation. |
+| Field | Boundaries |
+|---|---|
+| `budget_k` | Nonnegative budget in assumed USD thousands. |
+| `capacity_months` | Nonnegative person-month capacity; not calendar duration. |
+| `benefit_factor` | Multiplier from 0 to 3. |
+| `initiatives` | 1–16 uniquely identified items; acyclic known dependencies, nonnegative cost/effort/benefit and confidence/risk in [0,1]. |
+| `discounted_cash_flow` | `horizon_years` 1–10, `discount_rate` 0–1, `annual_benefit_growth` −0.5–0.5, `annual_operating_cost_fraction` 0–1. |
+| `benefit_overlaps` | Named groups with at least two unique known members and `overlap_fraction` 0–1; groups cannot share members. |
+| `stage_evidence` | At most 48 records with the documented gate, revision, criterion, source and reviewer fields. |
+| `correlated_sensitivity` | 20–500 paths, correlation 0–1 and spread 0–1. |
+| `seed` | Integer controlling reproducible illustrative draws. |
 
-The shared execution boundary caps the JSON input at 256 KB and rejects non-finite values. Invalid inputs produce a clear error; an earlier browser result remains visible until a new run succeeds. No automatic repair silently changes business assumptions.
+Reports contain summary, metrics, evidence, next actions, legacy selection, discounted selection, cash flows, gate statuses, assumption digest and sensitivity results. Downloaded JSON contains the complete result even where the UI displays a bounded preview. New assumptions are validated before optional model calls.
 
-## Output contract
+## Verification
 
-The JSON report contains `summary`, `metrics`, `evidence`, `next_actions`, `details`, and execution `provenance`.
-
-`details.selection` contains chosen IDs, cost, effort, adjusted benefit and net value. `selected_initiatives` retains the corresponding assumptions. `deferred` lists unselected IDs. `budget_frontier`, `benefit_sensitivity`, `dependency_waves`, and `illustrative_net_value_spread_k` provide review evidence. `model_brief` is null in local mode.
-
-Provenance records execution time, input and source SHA-256, execution mode, and model-call metadata. A hash makes changes detectable when compared with a trusted copy; it is not an immutable or signed audit record.
-
-## Optional AI integration
-
-A configured provider may generate three fields: `brief`, `assumption`, and `validation_milestone`. The prompt includes computed selection, sensitivity results and ownership waves. The model may not rewrite the allocation. Its text remains a draft for human review because schema validity alone cannot prove that prose is supported.
+- [`test_ai_investment_planner.py`](tests/test_ai_investment_planner.py): feasibility, known optimum, nonpositive value, cycle/unknown dependencies, invalid numbers and reproducibility.
+- [`test_ai_investment_planner_independent.py`](tests/test_ai_investment_planner_independent.py): exact decimal boundary and incumbent regressions, fractional frontier consistency and narrative person-month units.
+- [`test_investment_product.py`](tests/test_investment_product.py): independent NPV arithmetic, overlap deductions, current/stale evidence, dependency gates, full tranches, correlated regret and invalid option boundaries.
+- Shared platform/runtime tests exercise persistence, API, packaging and browser interactions separately.
 
 ```sh
-AI_PROVIDER=ollama AI_MODEL=your-installed-model python -m portfolio run ai_investment_planner --mode live
-```
-
-For an OpenAI-compatible endpoint, configure `AI_MODEL`, `AI_API_KEY` and, when needed, `AI_BASE_URL`. Keep secrets out of the repository and browser. See [model integration](docs/MODEL_INTEGRATION.md) for limits, failure handling and actual validation evidence.
-
-## Tests and independent review
-
-```sh
-python -m unittest discover -s tests -v
-python -m pip install -r requirements-dev.txt
-python -m coverage run --branch --source=portfolio,projects -m unittest discover -s tests
-python -m coverage report
-python -m portfolio build --output dist
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -m coverage run -m unittest discover -s tests -v
+.venv/bin/python -m coverage report
+python3 -m portfolio build --output dist
 node --test tests/frontend.test.mjs
 ```
 
-Tests cover feasible optimal selection, dependency closure, empty recommendations, budget and capacity ceilings, cycles, unknown dependencies, reproducibility, input validation, and structured-model behavior. Independent reviewer regressions specifically cover two almost equal investment values and a `0.1 + 0.2` budget boundary. The audit initially found those defects and invalid-root handling; the implementation was corrected and independently retested.
+Historical review reports apply to their recorded source revisions. Expanded-source review and current CI evidence must be evaluated independently. Coverage is not a guarantee of financial correctness or production readiness.
 
-Read the [independent review](projects/ai_investment_planner/independent-staff-review.md) for its actual scope, source hashes, findings, and limitations. This is an automated engineering review, not certification by an external human firm. Coverage is evidence of executed paths; it does not establish that all possible business assumptions are correct.
+## Operating boundaries
 
-## Operating model and adoption gates
+All examples and financial inputs are original synthetic assumptions. The application does not observe realized savings, provide a security recommendation, approve real funding, execute financial transactions or certify accounting/regulatory compliance. Person-month capacity is not a staffing calendar. Benefits and risks require accountable business validation before a real investment decision.
 
-The business sponsor owns benefit assumptions; engineering owns cost, dependencies and effort; finance reviews the units and time horizon. Before a funding decision, each owner should identify a measured baseline, an acceptance threshold, a budget release milestone and a stop condition.
+The local native deployment is a single-operator workspace. Public Pages is client-side execution. Identity-backed multi-user approval, external evidence verification and enterprise procurement/accounting integrations are not claimed.
 
-Re-run after a material assumption changes. Retain both input and report, explain changes in selection, and compare realized measurements with the original assumptions. Do not treat independent triangular draws as a model of correlated organizational failure.
+See [Architecture](docs/ARCHITECTURE.md), [Domain contracts](docs/DOMAIN_CONTRACTS.md), [Runbook](docs/PRODUCT_RUNBOOK.md), [Requirements](docs/REQUIREMENTS.md), [Security](SECURITY.md) and [Third-party notices](docs/THIRD_PARTY.md).
 
-Production adoption would require evidence approval, identity-based access, retention policy, change control, correlated scenarios and benefits accounting. Those integrations are deliberately outside the bounded functionality implemented here. See [operating model](projects/ai_investment_planner/docs/OPERATING_MODEL.md).
+## Persistent workspace
 
-## Limitations worth discussing in an interview
+The interface includes a versioned scenario library, execution history, exact input/result replay, outcome comparison and evidence reviews. GitHub Pages persists records in this browser; the native server uses SQLite with optimistic revisions, idempotent execution reservations and a verifiable audit chain. Application and workspace data remain independent of every other repository.
 
-- Annual assumed benefits and one-time implementation costs are compared without discounting or multiyear cash flow.
-- Overlapping benefits are not automatically detected. Sponsors must remove double counting.
-- Risk and confidence may encode the same uncertainty twice; the workbook exposes both assumptions rather than claiming they are calibrated.
-- Enumeration is exponential and intentionally limited to 16 proposals.
-- Dependency waves indicate ordering only, without resource-level scheduling or calendar commitments.
-- Model text is optional; the core solution is complete and reproducible with no model connection.
-
-## Authorship and license
-
-Seshu Nuthakki. Original synthetic examples. MIT license; vendored browser-runtime components retain their own notices in `web/vendor/pyodide`.
+See [workspace workflows, installation, container, backup and recovery](docs/WORKSPACE.md), [HTTP API contracts](docs/API.md), [domain Staff Engineer review](docs/STAFF_REVIEW_V2.md), [platform Staff Engineer review](docs/STAFF_PLATFORM_REVIEW.md), and [measured validation](docs/VALIDATION.md).

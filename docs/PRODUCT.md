@@ -1,19 +1,16 @@
-# Product brief
+# Investment product requirements and verification
 
-AI Investment Planner serves Director of Engineering / Business Sponsor.
+| Requirement | Evidence |
+|---|---|
+| Exact dependency-constrained optimization | Initiative/FeasiblePortfolio/FeasibleSet/ExactOptimizer; original and independent decimal regressions. |
+| Separate discounted selection | DiscountAssumptions and InvestmentAnalysis; independent manual NPV calculation test. |
+| Explicit overlap control | OverlapPolicy; full-overlap, single-member and invalid shared-membership tests. |
+| Revision-bound funding | FundingPolicy; accepted/stale criterion, stage order, dependency stage and full tranche tests. |
+| Correlated scenario/regret analysis | SensitivityAssumptions; seeded reproducibility, nonnegative regret and zero-spread optimum tests. |
+| Bounded AI interpretation | InvestmentBrief; existing person-month and unchanged-selection regression tests. |
+| Visible workflow results | Funding memo UI displays both objectives, cash-flow table, stages and finite-policy regret. |
+| Persistent workspace | app/platform tests and browser/native interaction checks. |
 
-The decision is: Which AI initiatives deserve funding and delivery capacity?
+Execute `tests/test_ai_investment_planner.py`, `tests/test_ai_investment_planner_independent.py` and `tests/test_investment_product.py` plus the complete runtime/platform suite. Acceptance also requires a current static build, browser execution, public CI and an independent automated review of expanded source.
 
-## Implemented outcome
-
-An exact portfolio optimizer with dependency constraints, benefit sensitivity, accountable owners and staged delivery gates.
-
-## Acceptance
-
-Validate benefit assumptions, cost, capacity, dependencies and owners before considering the computed selection.
-
-## Scope boundaries
-
-- Financial inputs are illustrative, not observed ROI.
-- Exact solver is bounded to 16 initiatives.
-- Person-month capacity is not a calendar schedule; independent benefit draws are not calibrated confidence intervals.
+The product README defines user workflows and input boundaries. Architecture and domain contract documents specify calculations and assumptions; this acceptance map links those requirements to executable verification.

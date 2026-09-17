@@ -1,0 +1,57 @@
+{
+  "repo": "ai-investment-planner",
+  "project_id": "ai_investment_planner",
+  "title": "AI Investment Planner",
+  "coverage": 97.75166070516096,
+  "python_tests": 138,
+  "frontend_passed": 51,
+  "examples": 4,
+  "release": "2.0.0",
+  "python_skipped": 2,
+  "frontend_skipped": 6,
+  "browser": {
+    "repo": "ai-investment-planner",
+    "fresh": true,
+    "history": true,
+    "branded": true,
+    "title": "AI Investment Planner"
+  },
+  "mobile": {
+    "repo": "ai-investment-planner",
+    "workspace": {
+      "scroll": 375,
+      "width": 375
+    },
+    "library": {
+      "scroll": 375,
+      "width": 375
+    },
+    "usable": true
+  },
+  "installed_wheel": {
+    "repository": "ai-investment-planner",
+    "status": "passed",
+    "project_id": "ai_investment_planner",
+    "wheel_bytes": 6447045,
+    "wheel_file": "ai_investment_planner-2.0.0-py3-none-any.whl",
+    "installed_cli": true,
+    "default_run": true,
+    "explicit_run": true,
+    "outside_checkout_build": true,
+    "packaged_application_source": true,
+    "fixture_count": 0,
+    "expected_fixture_count": 0,
+    "examples": 4,
+    "missing_runtime_assets": [],
+    "seconds": 3.036,
+    "wheel_sha256": "c1e61d980c562ee376e557c2c710fa164052245b0512c771b739f183f5df0cff",
+    "vendor_manifest_hashes_verified": 8,
+    "source_fixture_inventory_complete": true,
+    "personal_author_metadata_absent": true,
+    "pyproject_sha256": "7931dda89b635df431382007a7f1deaec02d577ec91a6a69e44e0b814a21e443",
+    "container_definition_sha256": "c205c738978ce7cecb779e14d604b3736429be760747f5880abcbf2d099c4e6b",
+    "compose_definition_sha256": "32c8bb3ab89a30043978d12874cb8c91001fcb762269765ace46fe46265faf91",
+    "docker_runtime_verified": false
+  },
+  "source_sha256": "8516c702355310aee51c1b53af403c7410366c769f3d44860fb2250e7b587760"
+}
