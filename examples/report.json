@@ -1,0 +1,245 @@
+{
+  "summary": "Fund 4 initiatives within the $340k illustrative budget. The selected set has $130.2k in modeled risk-adjusted net value.",
+  "metrics": [
+    {
+      "label": "Selected initiatives",
+      "value": 4,
+      "unit": "of 5"
+    },
+    {
+      "label": "Budget committed",
+      "value": 340.0,
+      "unit": "$k assumed"
+    },
+    {
+      "label": "Adjusted net value",
+      "value": 130.1875,
+      "unit": "$k modeled"
+    },
+    {
+      "label": "Capacity used",
+      "value": 19.0,
+      "unit": "person-months"
+    }
+  ],
+  "evidence": [
+    "Every feasible combination was evaluated; dependencies, budget and delivery capacity are hard constraints.",
+    "Adjusted benefit = assumed annual benefit \u00d7 benefit factor \u00d7 confidence \u00d7 (1 - risk). Net value subtracts one-time implementation cost; no discounting is applied.",
+    "All financial inputs are fictional planning assumptions. Benefits are not observed savings or a valuation.",
+    "Scenario spread uses 500 seeded triangular draws with independent benefits; it is an assumption sensitivity illustration, not a calibrated forecast."
+  ],
+  "next_actions": [
+    "Validate the highest-impact benefit assumption with the business owner before funding.",
+    "Release funding against a measured baseline, an acceptance test and an accountable owner.",
+    "Review dependency order and actual staffing before setting delivery dates."
+  ],
+  "details": {
+    "selection": {
+      "selected": [
+        "data-foundation",
+        "test-data",
+        "incident",
+        "policy"
+      ],
+      "cost_k": 340.0,
+      "months": 19.0,
+      "adjusted_benefit_k": 470.1875,
+      "net_value_k": 130.1875
+    },
+    "selected_initiatives": [
+      {
+        "id": "data-foundation",
+        "name": "Trusted data foundation",
+        "cost_k": 90,
+        "months": 5,
+        "benefit_k": 125,
+        "confidence": 0.85,
+        "risk": 0.1,
+        "depends_on": [],
+        "owner": "Data Platform"
+      },
+      {
+        "id": "test-data",
+        "name": "Synthetic testing service",
+        "cost_k": 110,
+        "months": 6,
+        "benefit_k": 260,
+        "confidence": 0.8,
+        "risk": 0.15,
+        "depends_on": [
+          "data-foundation"
+        ],
+        "owner": "Engineering Enablement"
+      },
+      {
+        "id": "incident",
+        "name": "Incident investigation assistant",
+        "cost_k": 75,
+        "months": 4,
+        "benefit_k": 155,
+        "confidence": 0.75,
+        "risk": 0.2,
+        "depends_on": [],
+        "owner": "Operations"
+      },
+      {
+        "id": "policy",
+        "name": "Grounded policy search",
+        "cost_k": 65,
+        "months": 4,
+        "benefit_k": 145,
+        "confidence": 0.85,
+        "risk": 0.15,
+        "depends_on": [
+          "data-foundation"
+        ],
+        "owner": "Knowledge Services"
+      }
+    ],
+    "deferred": [
+      "autonomous"
+    ],
+    "budget_frontier": [
+      {
+        "budget_k": 170.0,
+        "selected": [
+          "data-foundation",
+          "policy"
+        ],
+        "cost_k": 155.0,
+        "months": 9.0,
+        "adjusted_benefit_k": 200.3875,
+        "net_value_k": 45.3875
+      },
+      {
+        "budget_k": 255.0,
+        "selected": [
+          "data-foundation",
+          "test-data"
+        ],
+        "cost_k": 200.0,
+        "months": 11.0,
+        "adjusted_benefit_k": 272.425,
+        "net_value_k": 72.425
+      },
+      {
+        "budget_k": 340.0,
+        "selected": [
+          "data-foundation",
+          "test-data",
+          "incident",
+          "policy"
+        ],
+        "cost_k": 340.0,
+        "months": 19.0,
+        "adjusted_benefit_k": 470.1875,
+        "net_value_k": 130.1875
+      },
+      {
+        "budget_k": 425.0,
+        "selected": [
+          "data-foundation",
+          "test-data",
+          "incident",
+          "policy"
+        ],
+        "cost_k": 340.0,
+        "months": 19.0,
+        "adjusted_benefit_k": 470.1875,
+        "net_value_k": 130.1875
+      }
+    ],
+    "benefit_sensitivity": [
+      {
+        "benefit_factor": 0.5,
+        "selected": [],
+        "cost_k": 0,
+        "months": 0,
+        "adjusted_benefit_k": 0,
+        "net_value_k": 0
+      },
+      {
+        "benefit_factor": 0.75,
+        "selected": [
+          "data-foundation",
+          "test-data",
+          "policy"
+        ],
+        "cost_k": 265.0,
+        "months": 15.0,
+        "adjusted_benefit_k": 282.890625,
+        "net_value_k": 17.890625
+      },
+      {
+        "benefit_factor": 1,
+        "selected": [
+          "data-foundation",
+          "test-data",
+          "incident",
+          "policy"
+        ],
+        "cost_k": 340.0,
+        "months": 19.0,
+        "adjusted_benefit_k": 470.1875,
+        "net_value_k": 130.1875
+      },
+      {
+        "benefit_factor": 1.25,
+        "selected": [
+          "data-foundation",
+          "test-data",
+          "incident",
+          "policy"
+        ],
+        "cost_k": 340.0,
+        "months": 19.0,
+        "adjusted_benefit_k": 587.734375,
+        "net_value_k": 247.734375
+      }
+    ],
+    "illustrative_net_value_spread_k": {
+      "p10": 69.9,
+      "p50": 132.48,
+      "p90": 193.71
+    },
+    "dependency_waves": [
+      [
+        {
+          "initiative": "data-foundation",
+          "owner": "Data Platform",
+          "effort_months": 5
+        },
+        {
+          "initiative": "incident",
+          "owner": "Operations",
+          "effort_months": 4
+        }
+      ],
+      [
+        {
+          "initiative": "test-data",
+          "owner": "Engineering Enablement",
+          "effort_months": 6
+        },
+        {
+          "initiative": "policy",
+          "owner": "Knowledge Services",
+          "effort_months": 4
+        }
+      ]
+    ],
+    "model_brief": null,
+    "mode": "local exact optimization"
+  },
+  "provenance": {
+    "project_id": "ai_investment_planner",
+    "executed_at": "2026-09-17T05:01:51.565117+00:00",
+    "mode": "local",
+    "model_calls": [],
+    "elapsed_ms": 0.979,
+    "input_sha256": "6b50d17858836aa5c474ec606edc0393e58431a72b1c044f3ca46a87a9f40c92",
+    "source_sha256": "cc18c69da8cb967e48abb7a4211643330ba1fcc1a18ec5d56e4adebc332c60da",
+    "data_classification": "original synthetic fixture",
+    "scope": "Reference application run; not a production benchmark or employer result"
+  }
+}
